@@ -105,7 +105,7 @@ time3 = np.empty( shape=(0) )
 for i in range(len(f1mfile)):
     f1mdata = netCDF4.Dataset(f1mfile[i])
     f1mtime = np.array( f1mdata.variables['time'] )           # time in unix epoch 
-                                                              # aka milliseconds since 1970-01-01T00:00:00Z
+                                                              # aka microseconds since 1970-01-01T00:00:00Z
     f1mtemp = np.array( f1mdata.variables['proton_temperature'] ) # temperature in K
     f1mrho  = np.array( f1mdata.variables['proton_density'] ) # density in cm^-3
     f1mvx   = np.array( f1mdata.variables['proton_vx_gsm'] )  # velocity in km/sec
