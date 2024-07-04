@@ -9,13 +9,15 @@ Created on Wed Jul  3 08:43:26 2024
 import netCDF4
 import numpy as np
 import pandas as pd
-import os
-from datetime import datetime, timezone, timedelta
+import os.path
+from os import makedirs
+from datetime import datetime, timezone
 import matplotlib.pyplot as plt
 
-LIMITS = True      # Change plot xlimits if true
-PROPAGATE = True   # Ballistic propagation if true
-POINT = 33.        # Point that we ballistically propagate to in Re from earth
+LIMITS = True       # Change plot xlimits if true
+PROPAGATE = True    # Ballistic propagation if true
+POINT = 33.         # Point that we ballistically propagate to in Re from earth
+OUTPUT = './output' # Where output is stored
 
 ############################################################################
 #
@@ -82,11 +84,6 @@ popfile = ('./input/oe_pop_dscovr_s20240510000000_e20240510235959_p2024051103464
            './input/oe_pop_dscovr_s20240512000000_e20240512235959_p20240513022245_pub.nc',
            './input/oe_pop_dscovr_s20240513000000_e20240513235959_p20240514022213_pub.nc')
 
-# for name, variable in f1mdata.variables.items():
-#     if name == 'time':
-#         for attrname in variable.ncattrs():
-#             print("{}: {} -- {}".format(name, attrname, variable.getncattr(attrname)))
-
 # We combine the data from multiple files together in these arrays
 temp = np.empty( shape=(0) )
 rho  = np.empty( shape=(0) )
@@ -105,7 +102,7 @@ time3 = np.empty( shape=(0) )
 for i in range(len(f1mfile)):
     f1mdata = netCDF4.Dataset(f1mfile[i])
     f1mtime = np.array( f1mdata.variables['time'] )           # time in unix epoch 
-                                                              # aka microseconds since 1970-01-01T00:00:00Z
+                                                              # aka milliseconds since 1970-01-01T00:00:00Z
     f1mtemp = np.array( f1mdata.variables['proton_temperature'] ) # temperature in K
     f1mrho  = np.array( f1mdata.variables['proton_density'] ) # density in cm^-3
     f1mvx   = np.array( f1mdata.variables['proton_vx_gsm'] )  # velocity in km/sec
@@ -137,6 +134,11 @@ for i in range(len(f1mfile)):
     time2 = np.concatenate((time2, m1mtime))  # Time for bx, by, bz
     time3 = np.concatenate((time3, poptime))  # Time for satellite position
 
+# for name, variable in f1mdata.variables.items():
+#     if name == 'time':
+#         for attrname in variable.ncattrs():
+#             print("{}: {} -- {}".format(name, attrname, variable.getncattr(attrname)))
+
 # Verify temp, rho, ... bx, by, bz data have the same timestamps
 assert len(time1) == len(time2)
 for i in range(len(time1)):
@@ -162,6 +164,7 @@ if PROPAGATE:
         time1[i] = time1[i] + 1000.*distance/vx[i] # *1000 to get millisecs
 
 # Convert solar wind times to 'Year', 'Month', 'Day', 'Hour', 'Minute', 'Second', 'ms'
+# We need these for CCMC solar wind input file
 year1  = np.zeros(len(time1))
 month1 = np.zeros(len(time1))
 day1   = np.zeros(len(time1))
@@ -180,6 +183,7 @@ for i in range(len(time1)):
     sec1[i]   = datetime1.second
     ms1[i]    = datetime1.microsecond
         
+# Create dataframe containing propagated solar wind
 df = pd.DataFrame({'Year': year1, 'Month': month1, 'Day': day1, 'Hour': hour1, 
                   'Minute': min1, 'Second': sec1, 'ms': ms1, r'$B_x$ (nT)': bx, 
                   r'$B_y$ (nT)': by, r'$B_z$ (nT)': bz, r'$V_x$ (km/s)': vx, r'$V_y$ (km/s)': vy,
@@ -188,15 +192,16 @@ df = pd.DataFrame({'Year': year1, 'Month': month1, 'Day': day1, 'Hour': hour1,
 # Remove rows with bad data, ie., values = -99999.0
 df = df.drop(df[df[r'$T$ (Kelvin)'] < -99998.0].index)
 
-# Add datetime
+# Add datetime for plots
 df['Datetime'] = pd.to_datetime( df[['Year', 'Month', 'Day', 'Hour', 'Minute', 'Second', 'ms']] )
 
+# Adjust limits of plot
 if LIMITS:
     xlimits =( datetime(2024,5,10,6,0,0,0), datetime(2024,5,12,0,0,0,0) )
 else:
     xlimits =( datetime(2024,5,10,0,0,0,0), datetime(2024,5,14,0,0,0,0) )
 
-# Set some plot configs
+# Create plot of propagated solar wind
 plt.rcParams["figure.figsize"] = [12.0,12.0] 
 plt.rcParams["figure.autolayout"] = True
 plt.rcParams["figure.dpi"] = 600
@@ -249,13 +254,28 @@ df.plot( x='Datetime', y=[r'$B_x$ (nT)', r'$B_y$ (nT)', r'$B_z$ (nT)'], \
                 ax=ax[3])  
 ax[3].legend(loc='lower left')
 
-# fig.savefig( os.path.join( info['dir_plots'], "solar_wind_inputs.png" ) )
-# # fig.savefig( os.path.join( info['dir_plots'], "solar_wind_inputs.pdf" ) )
-# # fig.savefig( os.path.join( info['dir_plots'], "solar_wind_inputs.eps" ) )
-# # fig.savefig( os.path.join( info['dir_plots'], "solar_wind_inputs.jpg" ) )
-# # fig.savefig( os.path.join( info['dir_plots'], "solar_wind_inputs.tif" ) )
-# # fig.savefig( os.path.join( info['dir_plots'], "solar_wind_inputs.svg" ) )
-  
-    
+
+if not os.path.exists(OUTPUT):
+    makedirs(OUTPUT)
+
+fig.savefig( os.path.join( OUTPUT, "solar_wind_inputs.png" ) )
+# fig.savefig( os.path.join( OUTPUT, "solar_wind_inputs.pdf" ) )
+# fig.savefig( os.path.join( OUTPUT, "solar_wind_inputs.eps" ) )
+# fig.savefig( os.path.join( OUTPUT, "solar_wind_inputs.jpg" ) )
+# fig.savefig( os.path.join( OUTPUT, "solar_wind_inputs.tif" ) )
+# fig.savefig( os.path.join( OUTPUT, "solar_wind_inputs.svg" ) )
+
+# Save propagated solar wind in text file for CCMC
+outputFile = open(os.path.join( OUTPUT, "solar_wind.txt" ), 'w')
+for index, row in df.iterrows():
+    print('{} {} {} {} {} {} {} {} {} {} {} {} {} {} {}'.format(row['Year'], 
+              row['Month'],              row['Day'],           row['Hour'], 
+              row['Minute'],             row['Second'],        row['ms'], 
+              row[r'$B_x$ (nT)'],        row[r'$B_y$ (nT)'],   row[r'$B_z$ (nT)'],
+              row[r'$V_x$ (km/s)'],      row[r'$V_y$ (km/s)'], row[r'$V_z$ (km/s)'],
+              row[r'$N$ (${cm}^{-3}$)'], row[r'$T$ (Kelvin)']), file = outputFile)
+outputFile.close()
+
+
     
     
