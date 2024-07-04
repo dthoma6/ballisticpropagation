@@ -242,8 +242,11 @@ df.plot( x='Datetime', y=[r'$V_x$ (km/s)', r'$V_y$ (km/s)', r'$V_z$ (km/s)'], \
                 grid = False,\
                 legend=True,
                 ax=ax[2])  
-ax[2].legend(loc='lower left')
-
+if LIMITS:
+    ax[2].legend(loc='lower left')
+else:
+    ax[2].legend(loc='lower right')
+    
 df.plot( x='Datetime', y=[r'$B_x$ (nT)', r'$B_y$ (nT)', r'$B_z$ (nT)'], \
                 xlabel=r'Time (UTC)', \
                 ylabel=r'$B$ (nT)', \
@@ -252,8 +255,10 @@ df.plot( x='Datetime', y=[r'$B_x$ (nT)', r'$B_y$ (nT)', r'$B_z$ (nT)'], \
                 grid = False,\
                 legend=True,
                 ax=ax[3])  
-ax[3].legend(loc='lower left')
-
+if LIMITS: 
+    ax[3].legend(loc='lower left')
+else:
+    ax[3].legend(loc='lower right')
 
 if not os.path.exists(OUTPUT):
     makedirs(OUTPUT)
