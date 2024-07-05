@@ -165,6 +165,7 @@ if PROPAGATE:
 
 # Convert solar wind times to 'Year', 'Month', 'Day', 'Hour', 'Minute', 'Second', 'ms'
 # We need these for CCMC solar wind input file
+date1  = [None] * len(time1)
 year1  = np.zeros(len(time1))
 month1 = np.zeros(len(time1))
 day1   = np.zeros(len(time1))
@@ -174,26 +175,23 @@ sec1   = np.zeros(len(time1))
 ms1    = np.zeros(len(time1))
 
 for i in range(len(time1)):
-    datetime1 = datetime.fromtimestamp(time1[i]/1000, timezone.utc)
-    year1[i]  = datetime1.year
-    month1[i] = datetime1.month
-    day1[i]   = datetime1.day
-    hour1[i]  = datetime1.hour
-    min1[i]   = datetime1.minute
-    sec1[i]   = datetime1.second
-    ms1[i]    = datetime1.microsecond
+    date1[i]  = datetime.fromtimestamp(time1[i]/1000, timezone.utc)
+    year1[i]  = date1[i].year
+    month1[i] = date1[i].month
+    day1[i]   = date1[i].day
+    hour1[i]  = date1[i].hour
+    min1[i]   = date1[i].minute
+    sec1[i]   = date1[i].second
+    ms1[i]    = date1[i].microsecond
         
 # Create dataframe containing propagated solar wind
-df = pd.DataFrame({'Year': year1, 'Month': month1, 'Day': day1, 'Hour': hour1, 
+df = pd.DataFrame({'Datetime': date1,'Year': year1, 'Month': month1, 'Day': day1, 'Hour': hour1,
                   'Minute': min1, 'Second': sec1, 'ms': ms1, r'$B_x$ (nT)': bx, 
                   r'$B_y$ (nT)': by, r'$B_z$ (nT)': bz, r'$V_x$ (km/s)': vx, r'$V_y$ (km/s)': vy,
                   r'$V_z$ (km/s)': vz, r'$N$ (${cm}^{-3}$)': rho, r'$T$ (Kelvin)': temp})
 
 # Remove rows with bad data, ie., values = -99999.0
 df = df.drop(df[df[r'$T$ (Kelvin)'] < -99998.0].index)
-
-# Add datetime for plots
-df['Datetime'] = pd.to_datetime( df[['Year', 'Month', 'Day', 'Hour', 'Minute', 'Second', 'ms']] )
 
 # Adjust limits of plot
 if LIMITS:
@@ -215,6 +213,10 @@ plt.rcParams.update({
 plt.rcParams['text.latex.preamble'] = r'\usepackage{cmbright}'
 
 fig, ax = plt.subplots(4, 1, sharex=True, sharey=False)
+
+from matplotlib import dates
+formatter = dates.DateFormatter('%m/%d %H:%M') 
+ax[3].xaxis.set_major_formatter(formatter)
 
 df.plot( x='Datetime', y=[r'$N$ (${cm}^{-3}$)'], \
                 xlabel=r'Time (UTC)', \
