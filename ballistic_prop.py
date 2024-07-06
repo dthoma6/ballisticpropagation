@@ -60,7 +60,21 @@ OUTPUT = './output' # Where output is stored
 #     https://www.ngdc.noaa.gov/dscovr/data/2024/05/oe_m1m_dscovr_s20240513000000_e20240513235959_p20240514021543_pub.nc.gz \
 #     https://www.ngdc.noaa.gov/dscovr/data/2024/05/oe_m1s_dscovr_s20240513000000_e20240513235959_p20240514021630_pub.nc.gz \
 #     https://www.ngdc.noaa.gov/dscovr/data/2024/05/oe_mg1_dscovr_s20240513000000_e20240513235959_p20240514013653_pub.nc.gz \
-#     https://www.ngdc.noaa.gov/dscovr/data/2024/05/oe_pop_dscovr_s20240513000000_e20240513235959_p20240514022213_pub.nc.gz
+#     https://www.ngdc.noaa.gov/dscovr/data/2024/05/oe_pop_dscovr_s20240513000000_e20240513235959_p20240514022213_pub.nc.gz \
+#     https://www.ngdc.noaa.gov/dscovr/data/2024/05/oe_f1m_dscovr_s20240513000000_e20240513235959_p20240514022139_pub.nc.gz \
+#     https://www.ngdc.noaa.gov/dscovr/data/2024/05/oe_f3s_dscovr_s20240513000000_e20240513235959_p20240514022158_pub.nc.gz \
+#     https://www.ngdc.noaa.gov/dscovr/data/2024/05/oe_fc1_dscovr_s20240513000000_e20240513235959_p20240514022117_pub.nc.gz \
+#     https://www.ngdc.noaa.gov/dscovr/data/2024/05/oe_m1m_dscovr_s20240513000000_e20240513235959_p20240514021543_pub.nc.gz \
+#     https://www.ngdc.noaa.gov/dscovr/data/2024/05/oe_m1s_dscovr_s20240513000000_e20240513235959_p20240514021630_pub.nc.gz \
+#     https://www.ngdc.noaa.gov/dscovr/data/2024/05/oe_mg1_dscovr_s20240513000000_e20240513235959_p20240514013653_pub.nc.gz \
+#     https://www.ngdc.noaa.gov/dscovr/data/2024/05/oe_pop_dscovr_s20240513000000_e20240513235959_p20240514022213_pub.nc.gz \
+#     https://www.ngdc.noaa.gov/dscovr/data/2024/05/oe_f1m_dscovr_s20240514000000_e20240514235959_p20240515022151_pub.nc.gz \
+#     https://www.ngdc.noaa.gov/dscovr/data/2024/05/oe_f3s_dscovr_s20240514000000_e20240514235959_p20240515022210_pub.nc.gz \
+#     https://www.ngdc.noaa.gov/dscovr/data/2024/05/oe_fc1_dscovr_s20240514000000_e20240514235959_p20240515022131_pub.nc.gz \
+#     https://www.ngdc.noaa.gov/dscovr/data/2024/05/oe_m1m_dscovr_s20240514000000_e20240514235959_p20240515021611_pub.nc.gz \
+#     https://www.ngdc.noaa.gov/dscovr/data/2024/05/oe_m1s_dscovr_s20240514000000_e20240514235959_p20240515021648_pub.nc.gz \
+#     https://www.ngdc.noaa.gov/dscovr/data/2024/05/oe_mg1_dscovr_s20240514000000_e20240514235959_p20240515013713_pub.nc.gz \
+#     https://www.ngdc.noaa.gov/dscovr/data/2024/05/oe_pop_dscovr_s20240514000000_e20240514235959_p20240515022225_pub.nc.gz
 #
 # gunzip the netCDF4 files
 
@@ -69,20 +83,23 @@ OUTPUT = './output' # Where output is stored
 f1mfile = ('./input/oe_f1m_dscovr_s20240510000000_e20240510235959_p20240511034609_pub.nc',
            './input/oe_f1m_dscovr_s20240511000000_e20240511235959_p20240512022214_pub.nc',
            './input/oe_f1m_dscovr_s20240512000000_e20240512235959_p20240513022209_pub.nc',
-           './input/oe_f1m_dscovr_s20240513000000_e20240513235959_p20240514022139_pub.nc')
+           './input/oe_f1m_dscovr_s20240513000000_e20240513235959_p20240514022139_pub.nc',
+           './input/oe_f1m_dscovr_s20240514000000_e20240514235959_p20240515022151_pub.nc')
 
 # These files, among other variables, contain time, bx_gsm, by_gsm, bz_gsm
 m1mfile = ('./input/oe_m1m_dscovr_s20240510000000_e20240510235959_p20240511034031_pub.nc',
            './input/oe_m1m_dscovr_s20240511000000_e20240511235959_p20240512021629_pub.nc',
            './input/oe_m1m_dscovr_s20240512000000_e20240512235959_p20240513021624_pub.nc',
-           './input/oe_m1m_dscovr_s20240513000000_e20240513235959_p20240514021543_pub.nc')
+           './input/oe_m1m_dscovr_s20240513000000_e20240513235959_p20240514021543_pub.nc',
+           './input/oe_m1m_dscovr_s20240514000000_e20240514235959_p20240515021611_pub.nc')
            
 
 # These files, among other variables, contain time, sat_x_gsm (satellite position)
 popfile = ('./input/oe_pop_dscovr_s20240510000000_e20240510235959_p20240511034641_pub.nc',
            './input/oe_pop_dscovr_s20240511000000_e20240511235959_p20240512022246_pub.nc',
            './input/oe_pop_dscovr_s20240512000000_e20240512235959_p20240513022245_pub.nc',
-           './input/oe_pop_dscovr_s20240513000000_e20240513235959_p20240514022213_pub.nc')
+           './input/oe_pop_dscovr_s20240513000000_e20240513235959_p20240514022213_pub.nc',
+           './input/oe_pop_dscovr_s20240514000000_e20240514235959_p20240515022225_pub.nc')
 
 # We combine the data from multiple files together in these arrays
 temp = np.empty( shape=(0) )
@@ -195,16 +212,16 @@ df = df.drop(df[df[r'$T$ (Kelvin)'] < -99998.0].index)
 
 # Adjust limits of plot
 if LIMITS:
-    xlimits =( datetime(2024,5,10,6,0,0,0), datetime(2024,5,12,0,0,0,0) )
-else:
     xlimits =( datetime(2024,5,10,0,0,0,0), datetime(2024,5,14,0,0,0,0) )
+else:
+    xlimits =( datetime(2024,5,10,0,0,0,0), datetime(2024,5,15,0,0,0,0) )
 
 # Create plot of propagated solar wind
 plt.rcParams["figure.figsize"] = [12.0,12.0] 
 plt.rcParams["figure.autolayout"] = True
 plt.rcParams["figure.dpi"] = 600
 plt.rcParams['axes.grid'] = True
-plt.rcParams['font.size'] = 22
+plt.rcParams['font.size'] = 12
 plt.rcParams.update({
     "text.usetex": True,
     "font.family": "sans-serif",
@@ -245,7 +262,7 @@ df.plot( x='Datetime', y=[r'$V_x$ (km/s)', r'$V_y$ (km/s)', r'$V_z$ (km/s)'], \
                 legend=True,
                 ax=ax[2])  
 if LIMITS:
-    ax[2].legend(loc='lower left')
+    ax[2].legend(loc='lower right')
 else:
     ax[2].legend(loc='lower right')
     
@@ -258,9 +275,10 @@ df.plot( x='Datetime', y=[r'$B_x$ (nT)', r'$B_y$ (nT)', r'$B_z$ (nT)'], \
                 legend=True,
                 ax=ax[3])  
 if LIMITS: 
-    ax[3].legend(loc='lower left')
+    ax[3].legend(loc='lower right')
 else:
     ax[3].legend(loc='lower right')
+plt.xticks(rotation=90)
 
 if not os.path.exists(OUTPUT):
     makedirs(OUTPUT)
@@ -283,6 +301,31 @@ for index, row in df.iterrows():
               row[r'$N$ (${cm}^{-3}$)'], row[r'$T$ (Kelvin)']), file = outputFile)
 outputFile.close()
 
+# Statistics on solar wind parameters
+minbx = np.min(df[r'$B_x$ (nT)'])
+minby = np.min(df[r'$B_y$ (nT)'])
+minbz = np.min(df[r'$B_z$ (nT)'])
+minvx = np.min(df[r'$V_x$ (km/s)'])   
+minvy = np.min(df[r'$V_y$ (km/s)'])
+minvz = np.min(df[r'$V_z$ (km/s)'])
+minrho = np.min(df[r'$N$ (${cm}^{-3}$)'])
+minT = np.min(df[r'$T$ (Kelvin)'])
+maxbx = np.max(df[r'$B_x$ (nT)'])
+maxby = np.max(df[r'$B_y$ (nT)'])
+maxbz = np.max(df[r'$B_z$ (nT)'])
+maxvx = np.max(df[r'$V_x$ (km/s)'])   
+maxvy = np.max(df[r'$V_y$ (km/s)'])
+maxvz = np.max(df[r'$V_z$ (km/s)'])
+maxrho = np.max(df[r'$N$ (${cm}^{-3}$)'])
+maxT = np.max(df[r'$T$ (Kelvin)'])
 
-    
+print( 'Min/Max Bx: ', minbx, maxbx)
+print( 'Min/Max By: ', minby, maxby)
+print( 'Min/Max Bz: ', minbz, maxbz)
+print( 'Min/Max Vx: ', minvx, maxvx)
+print( 'Min/Max Vy: ', minvy, maxvy)
+print( 'Min/Max Vz: ', minvz, maxvz)
+print( 'Min/Max rho: ', minrho, maxrho)
+print( 'Min/Max T: ', minT, maxT)
+
     
