@@ -33,7 +33,14 @@ OUTPUT = './output' # Where output is stored
 
 # Download Mother's Day storm solar wind data into the subfolder './input' using:
 #
-# wget https://www.ngdc.noaa.gov/dscovr/data/2024/05/oe_f1m_dscovr_s20240510000000_e20240510235959_p20240511034609_pub.nc.gz \
+# wget https://www.ngdc.noaa.gov/dscovr/data/2024/05/oe_f1m_dscovr_s20240509000000_e20240509235959_p20240511022214_pub.nc.gz \
+#     https://www.ngdc.noaa.gov/dscovr/data/2024/05/oe_f3s_dscovr_s20240509000000_e20240509235959_p20240511022232_pub.nc.gz \
+#     https://www.ngdc.noaa.gov/dscovr/data/2024/05/oe_fc1_dscovr_s20240509000000_e20240509235959_p20240511022151_pub.nc.gz \
+#     https://www.ngdc.noaa.gov/dscovr/data/2024/05/oe_m1m_dscovr_s20240509000000_e20240509235959_p20240511021629_pub.nc.gz \
+#     https://www.ngdc.noaa.gov/dscovr/data/2024/05/oe_m1s_dscovr_s20240509000000_e20240509235959_p20240511021711_pub.nc.gz \
+#     https://www.ngdc.noaa.gov/dscovr/data/2024/05/oe_mg1_dscovr_s20240509000000_e20240509235959_p20240511013719_pub.nc.gz \
+#     https://www.ngdc.noaa.gov/dscovr/data/2024/05/oe_pop_dscovr_s20240509000000_e20240509235959_p20240511022246_pub.nc.gz \
+#     https://www.ngdc.noaa.gov/dscovr/data/2024/05/oe_f1m_dscovr_s20240510000000_e20240510235959_p20240511034609_pub.nc.gz \
 #     https://www.ngdc.noaa.gov/dscovr/data/2024/05/oe_f3s_dscovr_s20240510000000_e20240510235959_p20240511034627_pub.nc.gz \
 #     https://www.ngdc.noaa.gov/dscovr/data/2024/05/oe_fc1_dscovr_s20240510000000_e20240510235959_p20240511034549_pub.nc.gz \
 #     https://www.ngdc.noaa.gov/dscovr/data/2024/05/oe_m1m_dscovr_s20240510000000_e20240510235959_p20240511034031_pub.nc.gz \
@@ -80,14 +87,16 @@ OUTPUT = './output' # Where output is stored
 
 # These files, among other variables, contain time, proton_temperature, 
 # proton_density, proton_vx_gsm, proton_vy_gsm, proton_vz_gsm
-f1mfile = ('./input/oe_f1m_dscovr_s20240510000000_e20240510235959_p20240511034609_pub.nc',
+f1mfile = ('./input/oe_f1m_dscovr_s20240509000000_e20240509235959_p20240511022214_pub.nc',
+           './input/oe_f1m_dscovr_s20240510000000_e20240510235959_p20240511034609_pub.nc',
            './input/oe_f1m_dscovr_s20240511000000_e20240511235959_p20240512022214_pub.nc',
            './input/oe_f1m_dscovr_s20240512000000_e20240512235959_p20240513022209_pub.nc',
            './input/oe_f1m_dscovr_s20240513000000_e20240513235959_p20240514022139_pub.nc',
            './input/oe_f1m_dscovr_s20240514000000_e20240514235959_p20240515022151_pub.nc')
 
 # These files, among other variables, contain time, bx_gsm, by_gsm, bz_gsm
-m1mfile = ('./input/oe_m1m_dscovr_s20240510000000_e20240510235959_p20240511034031_pub.nc',
+m1mfile = ('./input/oe_m1m_dscovr_s20240509000000_e20240509235959_p20240511021629_pub.nc',
+           './input/oe_m1m_dscovr_s20240510000000_e20240510235959_p20240511034031_pub.nc',
            './input/oe_m1m_dscovr_s20240511000000_e20240511235959_p20240512021629_pub.nc',
            './input/oe_m1m_dscovr_s20240512000000_e20240512235959_p20240513021624_pub.nc',
            './input/oe_m1m_dscovr_s20240513000000_e20240513235959_p20240514021543_pub.nc',
@@ -95,7 +104,8 @@ m1mfile = ('./input/oe_m1m_dscovr_s20240510000000_e20240510235959_p2024051103403
            
 
 # These files, among other variables, contain time, sat_x_gsm (satellite position)
-popfile = ('./input/oe_pop_dscovr_s20240510000000_e20240510235959_p20240511034641_pub.nc',
+popfile = ('./input/oe_pop_dscovr_s20240509000000_e20240509235959_p20240511022246_pub.nc',
+           './input/oe_pop_dscovr_s20240510000000_e20240510235959_p20240511034641_pub.nc',
            './input/oe_pop_dscovr_s20240511000000_e20240511235959_p20240512022246_pub.nc',
            './input/oe_pop_dscovr_s20240512000000_e20240512235959_p20240513022245_pub.nc',
            './input/oe_pop_dscovr_s20240513000000_e20240513235959_p20240514022213_pub.nc',
@@ -199,7 +209,7 @@ for i in range(len(time1)):
     hour1[i]  = date1[i].hour
     min1[i]   = date1[i].minute
     sec1[i]   = date1[i].second
-    ms1[i]    = date1[i].microsecond
+    ms1[i]    = date1[i].microsecond/1000. # Want milliseconds
         
 # Create dataframe containing propagated solar wind
 df = pd.DataFrame({'Datetime': date1,'Year': year1, 'Month': month1, 'Day': day1, 'Hour': hour1,
@@ -261,10 +271,6 @@ df.plot( x='Datetime', y=[r'$V_x$ (km/s)', r'$V_y$ (km/s)', r'$V_z$ (km/s)'], \
                 grid = False,\
                 legend=True,
                 ax=ax[2])  
-if LIMITS:
-    ax[2].legend(loc='lower right')
-else:
-    ax[2].legend(loc='lower right')
     
 df.plot( x='Datetime', y=[r'$B_x$ (nT)', r'$B_y$ (nT)', r'$B_z$ (nT)'], \
                 xlabel=r'Time (UTC)', \
@@ -274,10 +280,7 @@ df.plot( x='Datetime', y=[r'$B_x$ (nT)', r'$B_y$ (nT)', r'$B_z$ (nT)'], \
                 grid = False,\
                 legend=True,
                 ax=ax[3])  
-if LIMITS: 
-    ax[3].legend(loc='lower right')
-else:
-    ax[3].legend(loc='lower right')
+
 plt.xticks(rotation=90)
 
 if not os.path.exists(OUTPUT):
@@ -302,30 +305,30 @@ for index, row in df.iterrows():
 outputFile.close()
 
 # Statistics on solar wind parameters
-minbx = np.min(df[r'$B_x$ (nT)'])
-minby = np.min(df[r'$B_y$ (nT)'])
-minbz = np.min(df[r'$B_z$ (nT)'])
-minvx = np.min(df[r'$V_x$ (km/s)'])   
-minvy = np.min(df[r'$V_y$ (km/s)'])
-minvz = np.min(df[r'$V_z$ (km/s)'])
+minbx  = np.min(df[r'$B_x$ (nT)'])
+minby  = np.min(df[r'$B_y$ (nT)'])
+minbz  = np.min(df[r'$B_z$ (nT)'])
+minvx  = np.min(df[r'$V_x$ (km/s)'])   
+minvy  = np.min(df[r'$V_y$ (km/s)'])
+minvz  = np.min(df[r'$V_z$ (km/s)'])
 minrho = np.min(df[r'$N$ (${cm}^{-3}$)'])
-minT = np.min(df[r'$T$ (Kelvin)'])
-maxbx = np.max(df[r'$B_x$ (nT)'])
-maxby = np.max(df[r'$B_y$ (nT)'])
-maxbz = np.max(df[r'$B_z$ (nT)'])
-maxvx = np.max(df[r'$V_x$ (km/s)'])   
-maxvy = np.max(df[r'$V_y$ (km/s)'])
-maxvz = np.max(df[r'$V_z$ (km/s)'])
+minT   = np.min(df[r'$T$ (Kelvin)'])
+maxbx  = np.max(df[r'$B_x$ (nT)'])
+maxby  = np.max(df[r'$B_y$ (nT)'])
+maxbz  = np.max(df[r'$B_z$ (nT)'])
+maxvx  = np.max(df[r'$V_x$ (km/s)'])   
+maxvy  = np.max(df[r'$V_y$ (km/s)'])
+maxvz  = np.max(df[r'$V_z$ (km/s)'])
 maxrho = np.max(df[r'$N$ (${cm}^{-3}$)'])
-maxT = np.max(df[r'$T$ (Kelvin)'])
+maxT   = np.max(df[r'$T$ (Kelvin)'])
 
-print( 'Min/Max Bx: ', minbx, maxbx)
-print( 'Min/Max By: ', minby, maxby)
-print( 'Min/Max Bz: ', minbz, maxbz)
-print( 'Min/Max Vx: ', minvx, maxvx)
-print( 'Min/Max Vy: ', minvy, maxvy)
-print( 'Min/Max Vz: ', minvz, maxvz)
+print( 'Min/Max  Bx: ', minbx, maxbx)
+print( 'Min/Max  By: ', minby, maxby)
+print( 'Min/Max  Bz: ', minbz, maxbz)
+print( 'Min/Max  Vx: ', minvx, maxvx)
+print( 'Min/Max  Vy: ', minvy, maxvy)
+print( 'Min/Max  Vz: ', minvz, maxvz)
 print( 'Min/Max rho: ', minrho, maxrho)
-print( 'Min/Max T: ', minT, maxT)
+print( 'Min/Max   T: ', minT, maxT)
 
     
